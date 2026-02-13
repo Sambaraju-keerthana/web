@@ -1,0 +1,122 @@
+CREATE TABLE Statements
+CREATE TABLE user (
+    h_no INT PRIMARY KEY,
+    address VARCHAR(100),
+    area VARCHAR(40),
+    u_type VARCHAR(20),
+    no_of_members INT
+);
+
+CREATE TABLE distributor (
+    tin_no INT PRIMARY KEY,
+    d_name VARCHAR(50),
+    address VARCHAR(100),
+    contact VARCHAR(15)
+);
+
+CREATE TABLE solar_panel (
+    pv_no INT PRIMARY KEY,
+    pv_type VARCHAR(20),
+    capacity INT,
+    waranty INT
+);
+
+CREATE TABLE installation (
+    install_id INT PRIMARY KEY,
+    house_no INT,
+    tin_number INT,
+    pv_number INT,
+    install_type VARCHAR(20),
+    install_charge INT,
+    install_date DATE,
+    FOREIGN KEY (house_no) REFERENCES user(h_no),
+    FOREIGN KEY (tin_number) REFERENCES distributor(tin_no),
+    FOREIGN KEY (pv_number) REFERENCES solar_panel(pv_no)
+);
+
+4. INSERT VALUES (Sample Data)
+
+INSERT INTO user VALUES
+(101,'Green Villa','Delhi','domestic',4),
+(102,'Sun Apartments','Delhi','commercial',20),
+(103,'Bright House','Mumbai','domestic',5),
+(104,'Sky Towers','Chennai','commercial',30);
+
+INSERT INTO distributor VALUES
+(201,'SolarTech','Delhi','9876543210'),
+(202,'SunPower','Mumbai','9123456780'),
+(203,'EcoEnergy','Chennai','9988776655');
+
+INSERT INTO solar_panel VALUES
+(301,'mono',5,15),
+(302,'poly',8,25),
+(303,'mono',10,15),
+(304,'poly',12,25);
+
+INSERT INTO installation VALUES
+(1,101,201,301,'mono',40000,'2010-05-12'),
+(2,102,202,302,'poly',60000,'2012-07-10'),
+(3,103,201,303,'mono',40000,'2015-09-20'),
+(4,104,203,304,'poly',60000,'2018-11-15'),
+(5,101,202,302,'poly',60000,'2020-01-05');
+
+5. REQUIRED SELECT QUERIES (AS GIVEN)
+
+1. Display the area where monocrystalline panels are installed
+SELECT u.area
+FROM user u
+JOIN installation i ON i.house_no = u.h_no
+JOIN solar_panel p ON i.pv_number = p.pv_no
+WHERE p.pv_type = 'mono';
+
+2. Place name with highest capacity panel installed
+
+SELECT u.address, MAX(p.capacity)
+FROM installation i, user u, solar_panel p
+WHERE i.house_no = u.h_no
+AND i.pv_number = p.pv_no
+GROUP BY u.address
+HAVING MAX(p.capacity) >= ALL (
+    SELECT MAX(p.capacity)
+    FROM installation i, user u, solar_panel p
+    WHERE i.house_no = u.h_no
+    AND i.pv_number = p.pv_no
+    GROUP BY u.address
+);
+
+3. Area where maximum capacity panel is installed
+
+SELECT u.area
+FROM installation i, user u, solar_panel p
+WHERE i.house_no = u.h_no
+AND i.install_type = p.pv_type
+AND p.capacity = (SELECT MAX(capacity) FROM solar_panel);
+
+4. Total installation charges for both panel types in a specific area
+
+SELECT p.pv_type, SUM(i.install_charge)
+FROM installation i, user u, solar_panel p
+WHERE i.house_no = u.h_no
+AND i.install_type = p.pv_type
+AND u.area = 'delhi'
+GROUP BY p.pv_type;
+
+5. Distributor and panel details of the oldest installation
+
+SELECT d.tin_no, d.d_name, d.address, d.contact,
+       p.pv_no, p.pv_type, p.waranty, p.capacity
+FROM installation i, distributor d, solar_panel p
+WHERE i.tin_number = d.tin_no
+AND i.pv_number = p.pv_no
+AND i.install_date = (
+    SELECT MIN(install_date) FROM installation
+);
+
+6. Average sales of both panel types in commercial places
+
+SELECT p.pv_type, AVG(i.install_charge)
+FROM installation i, user u, solar_panel p
+WHERE i.house_no = u.h_no
+AND i.install_type = p.pv_type
+AND u.u_type = 'commercial'
+GROUP BY p.pv_type;

@@ -1,0 +1,253 @@
+HOME PAGE (index.html)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Book Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #ffffff);
+        }
+        .hero {
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        footer {
+            background-color: #0d6efd;
+            color: white;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Online Book Store</a>
+            <div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="catalogue.html">Books</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="hero">
+    <div>
+        <h1>Welcome to Our Online Book Store</h1>
+        <p>Discover Knowledge. Discover Stories.</p>
+        <a href="catalogue.html" class="btn btn-light">Browse Books</a>
+    </div>
+</section>
+
+<section class="container my-5">
+    <h2 class="text-center mb-4">Featured Books</h2>
+    <div class="row">
+        <article class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Web Development</h5>
+                    <p class="card-text">Learn HTML, CSS, and Bootstrap easily.</p>
+                </div>
+            </div>
+        </article>
+
+        <article class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Data Science</h5>
+                    <p class="card-text">Master Python and Machine Learning.</p>
+                </div>
+            </div>
+        </article>
+
+        <article class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Programming in Java</h5>
+                    <p class="card-text">Object-Oriented Programming concepts.</p>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<footer class="text-center">
+    © 2026 Online Book Store | All Rights Reserved
+</footer>
+
+</body>
+</html>
+
+✅ 2️⃣ BOOKS CATALOGUE PAGE (catalogue.html)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books Catalogue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<header>
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">Online Book Store</a>
+    </div>
+</nav>
+</header>
+
+<section class="container my-5">
+    <h2 class="text-center mb-4">Books Catalogue</h2>
+
+    <div class="row">
+        <article class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>HTML & CSS</h5>
+                    <p>Price: ₹499</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </article>
+
+        <article class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Python Programming</h5>
+                    <p>Price: ₹599</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </article>
+
+        <article class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Machine Learning</h5>
+                    <p>Price: ₹799</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </article>
+
+        <article class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Java Programming</h5>
+                    <p>Price: ₹550</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<footer class="bg-primary text-white text-center p-3">
+    © 2026 Online Book Store
+</footer>
+
+</body>
+</html>
+
+✅ 3️⃣ USER PROFILE PAGE (profile.html)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<header>
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">Online Book Store</a>
+    </div>
+</nav>
+</header>
+
+<section class="container my-5">
+    <h2 class="text-center mb-4">User Profile</h2>
+
+    <div class="card p-4">
+        <p><strong>Name:</strong> Keerthana</p>
+        <p><strong>Email:</strong> keerthana@email.com</p>
+        <p><strong>Phone:</strong> 9876543210</p>
+        <p><strong>Address:</strong> Hyderabad, India</p>
+    </div>
+</section>
+
+<footer class="bg-primary text-white text-center p-3">
+    © 2026 Online Book Store
+</footer>
+
+</body>
+</html>
+
+✅ 4️⃣ CONTACT US PAGE (contact.html)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<header>
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">Online Book Store</a>
+    </div>
+</nav>
+</header>
+
+<section class="container my-5">
+    <h2 class="text-center mb-4">Contact Us</h2>
+
+    <form class="card p-4">
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Message</label>
+            <textarea class="form-control" rows="4"></textarea>
+        </div>
+
+        <button class="btn btn-primary">Submit</button>
+    </form>
+</section>
+
+<footer class="bg-primary text-white text-center p-3">
+    © 2026 Online Book Store
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+Entities & Attributes
+EMPLOYEE
+
+SSN (Primary Key)
+
+Name
+
+Address
+
+Salary
+
+Sex
+
+Birth_Date
+
+Dept_No (FK)
+
+Super_SSN (FK – supervisor)
+
+DEPARTMENT
+
+Dept_ID (Primary Key)
+
+Dept_Name (Unique)
+
+Manager_SSN (FK)
+
+Manager_Start_Date
+
+DEPT_LOCATION
+
+Dept_ID (FK)
+
+Location
+
+(Composite Primary Key: Dept_ID, Location)
+
+PROJECT
+
+Proj_No (Primary Key)
+
+Proj_Name (Unique)
+
+Proj_Location
+
+Proj_Cost
+
+Start_Date
+
+End_Date
+
+Department_ID (FK)
+
+WORKS_ON
+
+Emp_SSN (FK)
+
+Project_No (FK)
+
+Hours
+
+(Composite Primary Key: Emp_SSN, Project_No)
+
+DEPENDENT
+
+Emp_SSN (FK)
+
+Name
+
+Sex
+
+Birth_Date
+
+Relationship
+
+(Composite Primary Key: Emp_SSN, Name)
+
+Relationships, Cardinality & Participation
+Relationship	Entities	Cardinality	Participation
+Works_For	Employee – Department	N : 1	Total (Employee)
+Manages	Employee – Department	1 : 1	Partial
+Controls	Department – Project	1 : N	Total (Project)
+Works_On	Employee – Project	M : N	Partial
+Supervises	Employee – Employee	1 : N	Partial
+Has	Employee – Dependent	1 : N	Total (Dependent)
+Located_At	Department – Location	1 : N	Partial
+2. ER Diagram → Relational Schema
+EMPLOYEE(SSN, Name, Address, Salary, Sex, Birth_Date, Dept_No, Super_SSN)
+
+DEPARTMENT(Dept_ID, Dept_Name, Manager_SSN, Manager_Start_Date)
+
+DEPT_LOCATION(Dept_ID, Location)
+
+PROJECT(Proj_No, Proj_Name, Proj_Location, Proj_Cost, Start_Date, End_Date, Department_ID)
+
+WORKS_ON(Emp_SSN, Project_No, Hours)
+
+DEPENDENT(Emp_SSN, Name, Sex, Birth_Date, Relationship)
+3. SQL: CREATE TABLE Statements
+
+CREATE TABLE department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(30) UNIQUE,
+    manager_ssn CHAR(9),
+    manager_start_date DATE
+);
+
+CREATE TABLE employee (
+    ssn CHAR(9) PRIMARY KEY,
+    name VARCHAR(50),
+    address VARCHAR(100),
+    salary DECIMAL(10,2),
+    sex CHAR(1),
+    birth_date DATE,
+    dept_no INT,
+    super_ssn CHAR(9),
+    FOREIGN KEY (dept_no) REFERENCES department(dept_id),
+    FOREIGN KEY (super_ssn) REFERENCES employee(ssn)
+);
+
+CREATE TABLE dept_location (
+    dept_id INT,
+    location VARCHAR(50),
+    PRIMARY KEY (dept_id, location),
+    FOREIGN KEY (dept_id) REFERENCES department(dept_id)
+);
+
+CREATE TABLE project (
+    proj_no INT PRIMARY KEY,
+    proj_name VARCHAR(40) UNIQUE,
+    proj_location VARCHAR(40),
+    proj_cost DECIMAL(12,2),
+    start_date DATE,
+    end_date DATE,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES department(dept_id)
+);
+
+CREATE TABLE works_on (
+    em_ssn CHAR(9),
+    project_no INT,
+    hours INT,
+    PRIMARY KEY (em_ssn, project_no),
+    FOREIGN KEY (em_ssn) REFERENCES employee(ssn),
+    FOREIGN KEY (project_no) REFERENCES project(proj_no)
+);
+
+CREATE TABLE dependant (
+    emp_ssn CHAR(9),
+    name VARCHAR(40),
+    sex CHAR(1),
+    birth_date DATE,
+    relationship VARCHAR(20),
+    PRIMARY KEY (emp_ssn, name),
+    FOREIGN KEY (emp_ssn) REFERENCES employee(ssn)
+);
+4. INSERT (POPULATE) DATA
+INSERT INTO department VALUES
+(1,'finance','111111111','2022-01-01'),
+(2,'R&D','222222222','2021-06-01');
+
+INSERT INTO employee VALUES
+('111111111','Ravi','Hyderabad',90000,'M','1985-05-12',1,NULL),
+('222222222','Anita','Bangalore',95000,'F','1987-08-19',2,NULL),
+('333333333','Suresh','Chennai',60000,'M','1990-03-10',1,'111111111'),
+('444444444','Meena','Pune',62000,'F','1992-11-21',2,'222222222'),
+('555555555','Arjun','Delhi',58000,'M','1991-07-30',2,'222222222'),
+('666666666','Neha','Mumbai',56000,'F','1993-09-14',2,'222222222');
+
+INSERT INTO dept_location VALUES
+(1,'Hyderabad'),(1,'Mumbai'),
+(2,'Bangalore'),(2,'Chennai');
+
+INSERT INTO project VALUES
+(101,'BudgetAnalysis','Hyderabad',70000,'2023-01-01','2024-12-31',1),
+(102,'TaxSystem','Mumbai',60000,'2023-03-01','2025-01-01',1),
+(201,'AIResearch','Bangalore',120000,'2022-05-01','2026-06-30',2),
+(202,'MLModel','Chennai',80000,'2022-06-01','2023-12-31',2);
+
+INSERT INTO works_on VALUES
+('333333333',101,10),
+('333333333',102,12),
+('444444444',201,15),
+('444444444',202,10),
+('555555555',201,12),
+('666666666',202,14);
+
+INSERT INTO dependant VALUES
+('333333333','Kiran','M','2015-06-10','Son'),
+('444444444','Anu','F','2018-09-12','Daughter'),
+('555555555','Riya','F','2016-03-20','Daughter');
+
+5. REQUIRED SELECT QUERIES (AS GIVEN)
+
+1. Employees earning more than avg salary of Finance
+
+SELECT e.*
+FROM employee e, department d
+WHERE e.dept_no = d.dept_id
+AND e.salary > (
+    SELECT AVG(e2.salary)
+    FROM employee e2, department d2
+    WHERE e2.dept_no = d2.dept_id
+    AND d2.dept_name = 'finance'
+);
+
+2. Employees working on more than one R&D project
+
+SELECT e.name, d.dept_name
+FROM employee e, department d, works_on w, project p, department d2
+WHERE e.dept_no = d.dept_id
+AND e.ssn = w.em_ssn
+AND w.project_no = p.proj_no
+AND p.department_id = d2.dept_id
+AND d2.dept_name = 'R&D'
+GROUP BY e.ssn, e.name, d.dept_name
+HAVING COUNT(w.project_no) > 1;
+
+3. Ongoing projects
+
+SELECT p.proj_no, p.proj_name, d.dept_name
+FROM project p, department d
+WHERE p.department_id = d.dept_id
+AND p.end_date > CURDATE();
+
+4. Supervisors with >3 subordinates on completed projects
+
+SELECT e.*
+FROM employee e, employee e2, works_on w, project p
+WHERE e.ssn = e2.super_ssn
+AND e.ssn = w.em_ssn
+AND w.project_no = p.proj_no
+AND p.end_date < CURDATE()
+GROUP BY e.ssn
+HAVING COUNT(DISTINCT e2.ssn) > 3;
+
+5. Dependents of employees whose completed project cost ≥ 100000
+
+SELECT dep.name
+FROM dependant dep, employee e, works_on w, project p
+WHERE dep.emp_ssn = e.ssn
+AND e.ssn = w.em_ssn
+AND w.project_no = p.proj_no
+AND p.end_date < CURDATE()
+GROUP BY dep.name, e.ssn
+HAVING SUM(p.proj_cost) >= 100000;
+6. Employees working in multiple project locations
+SELECT d.dept_name, e.*
+FROM employee e, department d, works_on w, project p
+WHERE e.dept_no = d.dept_id
+AND e.ssn = w.em_ssn
+AND w.project_no = p.proj_no
+GROUP BY e.ssn, d.dept_name
+HAVING COUNT(DISTINCT p.proj_location) > 1;
