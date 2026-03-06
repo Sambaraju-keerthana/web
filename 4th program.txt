@@ -244,6 +244,7 @@ AND w.project_no = p.proj_no
 AND p.end_date < CURDATE()
 GROUP BY dep.name, e.ssn
 HAVING SUM(p.proj_cost) >= 100000;
+
 6. Employees working in multiple project locations
 SELECT d.dept_name, e.*
 FROM employee e, department d, works_on w, project p
@@ -251,4 +252,5 @@ WHERE e.dept_no = d.dept_id
 AND e.ssn = w.em_ssn
 AND w.project_no = p.proj_no
 GROUP BY e.ssn, d.dept_name
+
 HAVING COUNT(DISTINCT p.proj_location) > 1;
